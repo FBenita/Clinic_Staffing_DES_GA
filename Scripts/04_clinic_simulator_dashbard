@@ -1,0 +1,33 @@
+# 1. Download the script directly from GitHub repository
+!wget -q -O web_app.py https://raw.githubusercontent.com/FBenita/Clinic_Staffing_DES_GA/015a00b90fdc001cb216e7310e50a18815e18e8a/Scripts/web_app.py
+
+# 2. Install required dependencies
+!pip install streamlit plotly pandas numpy scipy -q
+print("Script downloaded and dependencies installed!")
+
+import subprocess
+from google.colab import output
+import time
+import os
+
+# 1. Kill any hidden Streamlit servers running in the background
+os.system("pkill streamlit")
+
+# 2. Start the server (pointing to the downloaded web_app.py)
+subprocess.Popen([
+    "streamlit", "run", "web_app.py", 
+    "--server.enableCORS=false", 
+    "--server.enableXsrfProtection=false"
+])
+
+# Give it 3 seconds to boot up
+time.sleep(3)
+
+# 3. Generate the secure Google proxy link
+url = output.eval_js("google.colab.kernel.proxyPort(8501)")
+
+print("=========================================================")
+print("DASHBOARD IS READY")
+print("Click this secure Google link to open it:")
+print(url)
+print("=========================================================")
